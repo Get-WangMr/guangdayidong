@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ProspectMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Prospect">
+    <id column="PreCustomerNo" jdbcType="INTEGER" property="precustomerno" />
+    <result column="PreCustomerName" jdbcType="VARCHAR" property="precustomername" />
+    <result column="InsureAim" jdbcType="CHAR" property="insureaim" />
+    <result column="IDType" jdbcType="VARCHAR" property="idtype" />
+    <result column="BusiCategory" jdbcType="VARCHAR" property="busicategory" />
+    <result column="GrpNature" jdbcType="VARCHAR" property="grpnature" />
+    <result column="IDNo" jdbcType="VARCHAR" property="idno" />
+    <result column="SumNumPeople" jdbcType="INTEGER" property="sumnumpeople" />
+    <result column="PreSumPeople" jdbcType="INTEGER" property="presumpeople" />
+    <result column="Province" jdbcType="VARCHAR" property="province" />
+    <result column="City" jdbcType="VARCHAR" property="city" />
+    <result column="County" jdbcType="VARCHAR" property="county" />
+    <result column="DetailAddress" jdbcType="VARCHAR" property="detailaddress" />
+    <result column="CustomerType" jdbcType="VARCHAR" property="customertype" />
+    <result column="State" jdbcType="VARCHAR" property="state" />
+    <result column="CustomerLevel" jdbcType="VARCHAR" property="customerlevel" />
+    <collection property="linkmanList" ofType="com.example.demo.entity.Linkman">
+      <id column="PreCustomerNo" jdbcType="INTEGER" property="precustomerno" />
+      <id column="LinkOrderNo" jdbcType="INTEGER" property="linkorderno" />
+      <result column="LinkType" jdbcType="VARCHAR" property="linktype" />
+      <result column="LinkMan" jdbcType="VARCHAR" property="linkman" />
+      <result column="Birthday" jdbcType="DATE" property="birthday" />
+      <result column="Mobile" jdbcType="VARCHAR" property="mobile" />
+      <result column="Phone" jdbcType="VARCHAR" property="phone" />
+      <result column="Email" jdbcType="VARCHAR" property="email" />
+      <result column="Depart" jdbcType="VARCHAR" property="depart" />
+      <result column="Post" jdbcType="VARCHAR" property="post" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    PreCustomerNo, PreCustomerName, InsureAim, IDType, BusiCategory, GrpNature, IDNo, 
+    SumNumPeople, PreSumPeople, Province, City, County, DetailAddress, CustomerType, 
+    `State`, CustomerLevel
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from prospect
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </select>
+
+<!--  查询所有客户信息-->
+    <select id="selectProspectList" resultMap="BaseResultMap" parameterType="com.example.demo.entity.Prospect">
+      select * from prospect p left join linkman l on p.PreCustomerNo = l.PreCustomerNo
+      <where>
+        <if test="namePhoneId != null">
+          and p.PreCustomerName like concat("%",#{namePhoneId},"%")
+        </if>
+      </where>
+    </select>
+
+<!--  查询一个客户信息-->
+    <select id="selectProspect" parameterType="int" resultMap="BaseResultMap">
+        select * from prospect p left join linkman l on p.precustomerno = l.precustomerno where p.precustomerno=#{precustomerno_id}
+    </select>
+
+<!--  添加一个客户-->
+    <insert id="addProspect" parameterType="com.example.demo.entity.Prospect">
+      insert into prospect
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="precustomerno != null">
+          PreCustomerNo,
+        </if>
+        <if test="precustomername != null">
+          PreCustomerName,
+        </if>
+        <if test="insureaim != null">
+          InsureAim,
+        </if>
+        <if test="idtype != null">
+          IDType,
+        </if>
+        <if test="busicategory != null">
+          BusiCategory,
+        </if>
+        <if test="grpnature != null">
+          GrpNature,
+        </if>
+        <if test="idno != null">
+          IDNo,
+        </if>
+        <if test="sumnumpeople != null">
+          SumNumPeople,
+        </if>
+        <if test="presumpeople != null">
+          PreSumPeople,
+        </if>
+        <if test="province != null">
+          Province,
+        </if>
+        <if test="city != null">
+          City,
+        </if>
+        <if test="county != null">
+          County,
+        </if>
+        <if test="detailaddress != null">
+          DetailAddress,
+        </if>
+        <if test="customertype != null">
+          CustomerType,
+        </if>
+        <if test="state != null">
+          State,
+        </if>
+        <if test="customerlevel != null">
+          CustomerLevel
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="precustomerno != null">
+          #{precustomerno,jdbcType=INTEGER},
+        </if>
+        <if test="precustomername != null">
+          #{precustomername,jdbcType=VARCHAR},
+        </if>
+        <if test="insureaim != null">
+          #{insureaim,jdbcType=CHAR},
+        </if>
+        <if test="idtype != null">
+          #{idtype,jdbcType=VARCHAR},
+        </if>
+        <if test="busicategory != null">
+          #{busicategory,jdbcType=VARCHAR},
+        </if>
+        <if test="grpnature != null">
+          #{grpnature,jdbcType=VARCHAR},
+        </if>
+        <if test="idno != null">
+          #{idno,jdbcType=VARCHAR},
+        </if>
+        <if test="sumnumpeople != null">
+          #{sumnumpeople,jdbcType=INTEGER},
+        </if>
+        <if test="presumpeople != null">
+          #{presumpeople,jdbcType=INTEGER},
+        </if>
+        <if test="province != null">
+          #{province,jdbcType=VARCHAR},
+        </if>
+        <if test="city != null">
+          #{city,jdbcType=VARCHAR},
+        </if>
+        <if test="county != null">
+          #{county,jdbcType=VARCHAR},
+        </if>
+        <if test="detailaddress != null">
+          #{detailaddress,jdbcType=VARCHAR},
+        </if>
+        <if test="customertype != null">
+          #{customertype,jdbcType=VARCHAR},
+        </if>
+        <if test="state != null">
+          #{state,jdbcType=VARCHAR},
+        </if>
+        <if test="customerlevel != null">
+          #{customerlevel,jdbcType=VARCHAR}
+        </if>
+      </trim>
+    </insert>
+
+<!--修改客户表-->
+  <update id="updateProspect" parameterType="com.example.demo.entity.Prospect">
+    update prospect
+    <set>
+      <if test="precustomername != null">
+        PreCustomerName = #{precustomername,jdbcType=VARCHAR},
+      </if>
+      <if test="insureaim != null">
+        InsureAim = #{insureaim,jdbcType=CHAR},
+      </if>
+      <if test="busicategory != null">
+        BusiCategory = #{busicategory,jdbcType=VARCHAR},
+      </if>
+      <if test="grpnature != null">
+        GrpNature = #{grpnature,jdbcType=VARCHAR},
+      </if>
+      <if test="sumnumpeople != null">
+        SumNumPeople = #{sumnumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="presumpeople != null">
+        PreSumPeople = #{presumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="detailaddress != null">
+        DetailAddress = #{detailaddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </update>
+
+<!--  修改本地客户-->
+  <update id="updateProspectBen" parameterType="com.example.demo.entity.Prospect">
+    update prospect
+    <set>
+      <if test="precustomername != null">
+        PreCustomerName = #{precustomername,jdbcType=VARCHAR},
+      </if>
+      <if test="insureaim != null">
+        InsureAim = #{insureaim,jdbcType=CHAR},
+      </if>
+      <if test="busicategory != null">
+        BusiCategory = #{busicategory,jdbcType=VARCHAR},
+      </if>
+      <if test="grpnature != null">
+        GrpNature = #{grpnature,jdbcType=VARCHAR},
+      </if>
+      <if test="sumnumpeople != null">
+        SumNumPeople = #{sumnumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="presumpeople != null">
+        PreSumPeople = #{presumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="detailaddress != null">
+        DetailAddress = #{detailaddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from prospect
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="PreCustomerNo" keyProperty="precustomerno" parameterType="com.example.demo.entity.Prospect" useGeneratedKeys="true">
+    insert into prospect (PreCustomerName, InsureAim, IDType, 
+      BusiCategory, GrpNature, IDNo, 
+      SumNumPeople, PreSumPeople, Province, 
+      City, County, DetailAddress, 
+      CustomerType, `State`, CustomerLevel
+      )
+    values (#{precustomername,jdbcType=VARCHAR}, #{insureaim,jdbcType=CHAR}, #{idtype,jdbcType=VARCHAR}, 
+      #{busicategory,jdbcType=VARCHAR}, #{grpnature,jdbcType=VARCHAR}, #{idno,jdbcType=VARCHAR}, 
+      #{sumnumpeople,jdbcType=INTEGER}, #{presumpeople,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{detailaddress,jdbcType=VARCHAR}, 
+      #{customertype,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{customerlevel,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="PreCustomerNo" keyProperty="precustomerno" parameterType="com.example.demo.entity.Prospect" useGeneratedKeys="true">
+    insert into prospect
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="precustomername != null">
+        PreCustomerName,
+      </if>
+      <if test="insureaim != null">
+        InsureAim,
+      </if>
+      <if test="idtype != null">
+        IDType,
+      </if>
+      <if test="busicategory != null">
+        BusiCategory,
+      </if>
+      <if test="grpnature != null">
+        GrpNature,
+      </if>
+      <if test="idno != null">
+        IDNo,
+      </if>
+      <if test="sumnumpeople != null">
+        SumNumPeople,
+      </if>
+      <if test="presumpeople != null">
+        PreSumPeople,
+      </if>
+      <if test="province != null">
+        Province,
+      </if>
+      <if test="city != null">
+        City,
+      </if>
+      <if test="county != null">
+        County,
+      </if>
+      <if test="detailaddress != null">
+        DetailAddress,
+      </if>
+      <if test="customertype != null">
+        CustomerType,
+      </if>
+      <if test="state != null">
+        `State`,
+      </if>
+      <if test="customerlevel != null">
+        CustomerLevel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="precustomername != null">
+        #{precustomername,jdbcType=VARCHAR},
+      </if>
+      <if test="insureaim != null">
+        #{insureaim,jdbcType=CHAR},
+      </if>
+      <if test="idtype != null">
+        #{idtype,jdbcType=VARCHAR},
+      </if>
+      <if test="busicategory != null">
+        #{busicategory,jdbcType=VARCHAR},
+      </if>
+      <if test="grpnature != null">
+        #{grpnature,jdbcType=VARCHAR},
+      </if>
+      <if test="idno != null">
+        #{idno,jdbcType=VARCHAR},
+      </if>
+      <if test="sumnumpeople != null">
+        #{sumnumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="presumpeople != null">
+        #{presumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="detailaddress != null">
+        #{detailaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customertype != null">
+        #{customertype,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="customerlevel != null">
+        #{customerlevel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Prospect">
+    update prospect
+    <set>
+      <if test="precustomername != null">
+        PreCustomerName = #{precustomername,jdbcType=VARCHAR},
+      </if>
+      <if test="insureaim != null">
+        InsureAim = #{insureaim,jdbcType=CHAR},
+      </if>
+      <if test="idtype != null">
+        IDType = #{idtype,jdbcType=VARCHAR},
+      </if>
+      <if test="busicategory != null">
+        BusiCategory = #{busicategory,jdbcType=VARCHAR},
+      </if>
+      <if test="grpnature != null">
+        GrpNature = #{grpnature,jdbcType=VARCHAR},
+      </if>
+      <if test="idno != null">
+        IDNo = #{idno,jdbcType=VARCHAR},
+      </if>
+      <if test="sumnumpeople != null">
+        SumNumPeople = #{sumnumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="presumpeople != null">
+        PreSumPeople = #{presumpeople,jdbcType=INTEGER},
+      </if>
+      <if test="province != null">
+        Province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        City = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        County = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="detailaddress != null">
+        DetailAddress = #{detailaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customertype != null">
+        CustomerType = #{customertype,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `State` = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="customerlevel != null">
+        CustomerLevel = #{customerlevel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Prospect">
+    update prospect
+    set PreCustomerName = #{precustomername,jdbcType=VARCHAR},
+      InsureAim = #{insureaim,jdbcType=CHAR},
+      IDType = #{idtype,jdbcType=VARCHAR},
+      BusiCategory = #{busicategory,jdbcType=VARCHAR},
+      GrpNature = #{grpnature,jdbcType=VARCHAR},
+      IDNo = #{idno,jdbcType=VARCHAR},
+      SumNumPeople = #{sumnumpeople,jdbcType=INTEGER},
+      PreSumPeople = #{presumpeople,jdbcType=INTEGER},
+      Province = #{province,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR},
+      County = #{county,jdbcType=VARCHAR},
+      DetailAddress = #{detailaddress,jdbcType=VARCHAR},
+      CustomerType = #{customertype,jdbcType=VARCHAR},
+      `State` = #{state,jdbcType=VARCHAR},
+      CustomerLevel = #{customerlevel,jdbcType=VARCHAR}
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </update>
+</mapper>

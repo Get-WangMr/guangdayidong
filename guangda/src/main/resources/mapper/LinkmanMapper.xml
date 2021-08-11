@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.LinkmanMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Linkman">
+    <id column="PreCustomerNo" jdbcType="INTEGER" property="precustomerno" />
+    <id column="LinkOrderNo" jdbcType="INTEGER" property="linkorderno" />
+    <result column="LinkType" jdbcType="VARCHAR" property="linktype" />
+    <result column="LinkMan" jdbcType="VARCHAR" property="linkman" />
+    <result column="Birthday" jdbcType="DATE" property="birthday" />
+    <result column="Mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
+    <result column="Depart" jdbcType="VARCHAR" property="depart" />
+    <result column="Post" jdbcType="VARCHAR" property="post" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PreCustomerNo, LinkOrderNo, `LinkType`, LinkMan, Birthday, Mobile, Phone, Email, 
+    Depart, Post
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.example.demo.entity.LinkmanKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from linkman
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+      and LinkOrderNo = #{linkorderno,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.example.demo.entity.LinkmanKey">
+    delete from linkman
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+      and LinkOrderNo = #{linkorderno,jdbcType=INTEGER}
+  </delete>
+
+<!--  删除客户主联系表信息-->
+  <delete id="deleteLinkman" parameterType="int">
+    delete from linkman where PreCustomerNo = #{precustomerno}
+  </delete>
+
+<!--  删除客户副联系表信息-->
+  <delete id="deleteLinkmanfu" parameterType="int">
+    delete from linkman where LinkType = '副';
+  </delete>
+
+  <update id="updateLinkman" parameterType="com.example.demo.entity.Linkman">
+    update linkman
+    <set>
+      <if test="linkman != null">
+        LinkMan = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        Birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="mobile != null">
+        Mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null">
+        Depart = #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="post != null">
+        Post = #{post,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insert" keyColumn="PreCustomerNo" keyProperty="precustomerno" parameterType="com.example.demo.entity.Linkman" useGeneratedKeys="true">
+    insert into linkman (LinkOrderNo, `LinkType`, LinkMan, 
+      Birthday, Mobile, Phone, 
+      Email, Depart, Post
+      )
+    values (#{linkorderno,jdbcType=INTEGER}, #{linktype,jdbcType=VARCHAR}, #{linkman,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=DATE}, #{mobile,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{depart,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="PreCustomerNo" keyProperty="precustomerno" parameterType="com.example.demo.entity.Linkman" useGeneratedKeys="true">
+    insert into linkman
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="Precustomerno != null">
+        PreCustomerNo,
+      </if>
+      <if test="linkorderno != null">
+        LinkOrderNo,
+      </if>
+      <if test="linktype != null">
+        `LinkType`,
+      </if>
+      <if test="linkman != null">
+        LinkMan,
+      </if>
+      <if test="birthday != null">
+        Birthday,
+      </if>
+      <if test="mobile != null">
+        Mobile,
+      </if>
+      <if test="phone != null">
+        Phone,
+      </if>
+      <if test="email != null">
+        Email,
+      </if>
+      <if test="depart != null">
+        Depart,
+      </if>
+      <if test="post != null">
+        Post,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="Precustomerno != null">
+        #{precustomerno},
+      </if>
+      <if test="linkorderno != null">
+        #{linkorderno,jdbcType=INTEGER},
+      </if>
+      <if test="linktype != null">
+        #{linktype,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null">
+        #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="post != null">
+        #{post,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Linkman">
+    update linkman
+    <set>
+      <if test="linktype != null">
+        `LinkType` = #{linktype,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        LinkMan = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        Birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="mobile != null">
+        Mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null">
+        Depart = #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="post != null">
+        Post = #{post,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+      and LinkOrderNo = #{linkorderno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Linkman">
+    update linkman
+    set `LinkType` = #{linktype,jdbcType=VARCHAR},
+      LinkMan = #{linkman,jdbcType=VARCHAR},
+      Birthday = #{birthday,jdbcType=DATE},
+      Mobile = #{mobile,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR},
+      Depart = #{depart,jdbcType=VARCHAR},
+      Post = #{post,jdbcType=VARCHAR}
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+      and LinkOrderNo = #{linkorderno,jdbcType=INTEGER}
+  </update>
+
+<!--  添加一个联系方式-->
+  <insert id="addLinkman" parameterType="com.example.demo.entity.Linkman">
+    insert into linkman
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="precustomerno != null">
+        PreCustomerNo,
+      </if>
+      <if test="linkorderno != null">
+        LinkOrderNo,
+      </if>
+      <if test="linkman != null">
+        LinkMan,
+      </if>
+      <if test="birthday != null">
+        Birthday,
+      </if>
+      <if test="mobile != null">
+        Mobile,
+      </if>
+      <if test="phone != null">
+        Phone,
+      </if>
+      <if test="email != null">
+        Email,
+      </if>
+      <if test="depart != null">
+        Depart,
+      </if>
+      <if test="post != null">
+        Post
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="precustomerno != null">
+        #{precustomerno},
+      </if>
+      <if test="linkorderno != null">
+        #{linkorderno},
+      </if>
+      <if test="linkman != null">
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null">
+        #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="post != null">
+        #{post,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+</mapper>

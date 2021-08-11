@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ChinaMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.China">
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="Pid" jdbcType="INTEGER" property="pid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Id, `Name`, Pid
+  </sql>
+
+  <!--根据姓名查id-->
+  <!--<select id="selectIDByName" resultType="integer" parameterType="string">
+    select id from china where name = #{name}
+  </select>-->
+
+  <!--根据pid查询所有的省份-->
+  <select id="selectProvinceListByPid" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from china where pid=0 and id >0;
+  </select>
+
+  <!--根据pid查询市长或县-->
+  <select id="selectCityListByPid" resultMap="BaseResultMap" parameterType="integer">
+    select <include refid="Base_Column_List" /> from china where pid = #{id}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from china
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from china
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Id" keyProperty="id" parameterType="com.example.demo.entity.China" useGeneratedKeys="true">
+    insert into china (`Name`, Pid)
+    values (#{name,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="Id" keyProperty="id" parameterType="com.example.demo.entity.China" useGeneratedKeys="true">
+    insert into china
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `Name`,
+      </if>
+      <if test="pid != null">
+        Pid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.China">
+    update china
+    <set>
+      <if test="name != null">
+        `Name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        Pid = #{pid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.China">
+    update china
+    set `Name` = #{name,jdbcType=VARCHAR},
+      Pid = #{pid,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectId" parameterType="string" resultType="int">
+    select id from china where name = #{name}
+  </select>
+</mapper>
